@@ -1,0 +1,5 @@
+- name: Import tsuru gpg key
+  apt_key: state=present keyserver=keyserver.ubuntu.com id=B0DE9C5DEBF486359EB255B03B0153D0383F073D
+
+- name: Add tsuru deb repository
+  apt_repository: state=present repo='{{ item }} http://ppa.launchpad.net/tsuru/ppa/ubuntu {{ ansible_distribution_release }} main'
