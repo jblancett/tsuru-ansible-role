@@ -1,5 +1,52 @@
 - name: Import tsuru gpg key
   apt_key: state=present keyserver=keyserver.ubuntu.com id=B0DE9C5DEBF486359EB255B03B0153D0383F073D
+  tags:
+    - tsuru-ppa
 
 - name: Add tsuru deb repository
   apt_repository: state=present repo='{{ item }} http://ppa.launchpad.net/tsuru/ppa/ubuntu {{ ansible_distribution_release }} main'
+  with_items:
+    - deb
+    - deb-src
+  tags:
+    - tsuru-ppa
+
+- include: docker.yml
+  when: tsuru_install_docker
+  tags:
+    - docker
+
+- include: mongodb.yml
+  when: tsuru_install_mongodb
+  tags:
+    - mongodb
+
+- include: redis.yml
+  when: tsuru_install_redis
+  tags:
+    - redis
+
+- include: hipache.yml
+  when: tsuru_install_hipache
+  tags:
+    - hipache
+
+- include: gandalf-server.yml
+  when: tsuru_install_gandalf-server
+  tags:
+    - gandalf-server
+
+- include: archive-server.yml
+  when: tsuru_install_archive-server
+  tags:
+    - archive-server
+
+- include: docker-registry.yml
+  when: tsuru_install_docker-registry
+  tags:
+    - docker-registry
+
+- include: tsuru-server.yml
+  when: tsuru_install_tsuru-server
+  tags:
+    - tsuru-server

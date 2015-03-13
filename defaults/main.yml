@@ -1,0 +1,9 @@
+---
+tsuru_install_docker: true
+tsuru_install_mongodb: true
+tsuru_install_redis: true
+tsuru_install_hipache: true
+tsuru_install_gandalf-server: true
+tsuru_install_archive-server: true
+tsuru_install_docker-registry: true
+tsuru_install_tsuru-server: true
