@@ -7,9 +7,9 @@
 - name: install mongodb
   apt: state=present name=mongodb-org
 
-- name: set extra config options
+- name: set extra mongodb config options
   lineinfile: state=present dest=/etc/mongod.conf regexp="^{{ item.key }} ?= ?" line="{{ item.key }} = {{ item.value }}" owner=root group=root mode=0644
-  with_dict: mongodb_config
+  with_dict: tsuru_mongodb_config
   notify:
     - restart mongod
 
