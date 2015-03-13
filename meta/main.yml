@@ -1,0 +1,14 @@
+---
+galaxy_info:
+  author: Josh Blancett
+  description: installs tsuru
+  license: BSD
+  min_ansible_version: 1.4
+  platforms:
+  - name: Ubuntu
+    versions:
+    - trusty
+  categories:
+  - cloud
+  - web
+dependencies: []
