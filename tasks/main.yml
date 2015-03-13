@@ -31,16 +31,6 @@
   tags:
     - hipache
 
-- include: gandalf-server.yml
-  when: tsuru_install_gandalf-server
-  tags:
-    - gandalf-server
-
-- include: archive-server.yml
-  when: tsuru_install_archive-server
-  tags:
-    - archive-server
-
 - include: docker-registry.yml
   when: tsuru_install_docker-registry
   tags:
@@ -50,3 +40,13 @@
   when: tsuru_install_tsuru-server
   tags:
     - tsuru-server
+
+- include: archive-server.yml
+  when: tsuru_install_archive-server
+  tags:
+    - archive-server
+
+- include: gandalf-server.yml
+  when: tsuru_install_gandalf-server
+  tags:
+    - gandalf-server
