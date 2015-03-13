@@ -8,3 +8,6 @@ tsuru_install_archive-server: true
 tsuru_install_docker-registry: true
 tsuru_install_tsuru-server: true
 tsuru_docker_options: --insecure-registry=\"0.0.0.0/0\" -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock
+tsuru_mongodb_config:
+# You can add some extra configs for mongo here, for example:
+#  replSet: tsuru

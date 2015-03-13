@@ -1,0 +1,17 @@
+- name: import mongodb.org gpg key
+  apt_key: state=present keyserver=keyserver.ubuntu.com id=7F0CEB10
+
+- name: add mogodb.org deb repository
+  apt_repository: state=present repo='deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen'
+
+- name: install mongodb
+  apt: state=present name=mongodb-org
+
+- name: set extra config options
+  lineinfile: state=present dest=/etc/mongod.conf regexp="^{{ item.key }} ?= ?" line="{{ item.key }} = {{ item.value }}" owner=root group=root mode=0644
+  with_dict: mongodb_config
+  notify:
+    - restart mongod
+
+- name: start mongod
+  service: state=started name=mongod

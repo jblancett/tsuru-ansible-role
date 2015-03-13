@@ -1,3 +1,6 @@
 ---
 - name: restart docker
   service: state=restarted name=docker
+
+- name: restart mongod
+  service: state=restarted name=mongod
