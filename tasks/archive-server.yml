@@ -1,0 +1,5 @@
+- name: install archive-server
+  apt: state=present update_cache=yes cache_valid_time=86400 name=gandalf-server
+
+- name: start archive-server
+  service: state=started name=archive-server
