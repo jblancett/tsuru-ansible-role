@@ -1,0 +1,25 @@
+- name: Ensure the system can use the HTTPS transport for APT
+  stat: path=/usr/lib/apt/methods/https
+  register: apt_https_transport
+
+- name: Install HTTPS transport for APT
+  apt: pkg=apt-transport-https state=installed
+  when: not apt_https_transport.stat.exists
+
+- name: Import docker.io gpg key into apt
+  apt_key: state=present keyserver=keyserver.ubuntu.com id=36A1D7869245C8950F966E92D8576A8BA88D21E9
+
+- name: Add docker.io deb repository
+  apt_repository: state=present repo='deb https://get.docker.com/ubuntu docker main'
+
+- name: install docker
+  apt: state=present update_cache=yes cache_valid_time=86400 name=lxc-docker
+
+- name: configure docker listeners
+  lineinfile: state=present dest=/etc/default/docker regexp='^DOCKER_OPTS='
+    line="DOCKER_OPTS='{{ tsuru_docker_options }}'"
+  notify:
+    - restart docker
+
+- name: add ubuntu user to docker group
+  user: state=present append=yes groups=docker name=ubuntu
