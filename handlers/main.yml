@@ -10,3 +10,6 @@
 
 - name: restart gandalf-server
   service: state=restarted name=gandalf-server
+
+- name: restart tsuru-server-api
+  service: state=restarted name=tsuru-server-api

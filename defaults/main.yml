@@ -14,3 +14,47 @@ tsuru_docker_options: --insecure-registry=\"0.0.0.0/0\" -H tcp://0.0.0.0:2375 -H
 #  replSet: tsuru
 # make sure if you do, remove the {}
 tsuru_mongodb_config: {}
+
+tsuru_server_enabled: true
+tsuru_server_config:
+  listen: 0.0.0.0:8080
+  host: "{{ inventory_hostname }}"
+  admin-team: admin
+  database:
+    url: 127.0.0.1:27017
+    name: tsuru
+  git:
+    unit-repo: /home/applciation/current
+    api-server: http://{{ inventory_hostname }}:8000
+    rw-host: "{{ inventory_hostname }}"
+    ro-host: "{{ inventory_hostname }}"
+  auth:
+    scheme: native
+    user-registration: false
+    hash-cost: 10
+  queue: redis
+  redis-queue:
+    host: 127.0.0.1
+    port: 6379
+  routers:
+    default:
+      type: hipache
+      redis-server: 127.0.0.1:6379
+      domain: "{{ inventory_hostname }}"
+  provisioner: docker
+  docker:
+    registry: 127.0.0.1:5000
+    collection: docker_containers
+    repository-namespace: tsuru
+    router: default
+    deploy-cmd: /var/lib/tsuru/deploy
+    segregate: false
+    cluster:
+      mongo-url: 127.0.0.1:27017
+      mongo-database: cluster
+    run-cmd:
+      bin: /var/lib/tsuru/start
+      port: 8888
+    ssh:
+      user: ubuntu
+    servers: ['http://localhost:2375']

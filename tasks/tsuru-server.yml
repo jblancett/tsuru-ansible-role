@@ -1,0 +1,15 @@
+- name: install tsuru-server
+  apt: state=present update_cache=yes cache_valid_time=86400 name=tsuru-server
+
+- name: configure tsuru
+  template: src=tsuru.conf.j2 dest=/etc/tsuru/tsuru.conf owner=root group=root mode=0644
+  notify:
+    - restart tsuru-server-api
+
+- name: ensure tsuru-server-api is enabled
+  lineinfile: state=present dest=/etc/default/tsuru-server regexp='^TSR_API_ENABLED=' line='TSR_API_ENABLED=yes'
+  when: tsuru_server_enabled
+
+- name: start tsuru-server
+  service: state=started name=tsuru-server-api
+  when: tsuru_server_enabled
