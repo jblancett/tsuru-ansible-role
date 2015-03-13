@@ -1,0 +1,19 @@
+- include_vars: gandalf-server.yml
+
+- name: install gandalf-server
+  apt: state=present update_cache=yes cache_valid_time=86400 name=gandalf-server
+
+- name: create git hooks folder
+  file: state=directory path={{ tsuru_gandalf_config.git.bare.template }}/hooks owner=git group=git mode=0755
+
+- name: copy git hook
+  get_url: url={{ tsuru_git_hook_url }} dest={{ tsuru_gandalf_config.git.bare.template }}/hooks/{{ tsuru_git_hook }} force=yes
+  when: tsuru_git_hook
+
+- name: configure gandalf-server
+  template: src=gandalf.conf.j2 dest=/etc/gandalf.conf owner=root group=root mode=0644
+  notify:
+    - restart gandalf-server
+
+- name: generate .bash_profile for git user
+  template: src=bash_profile.j2 dest=/home/{{ tsuru_gandalf_config.uid }}/.bash_profile owner={{ tsuru_gandalf_config.uid }} group={{ tsuru_gandalf_config.uid }} mode=0644

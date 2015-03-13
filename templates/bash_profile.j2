@@ -1,0 +1,4 @@
+export TSURU_HOST={{ tsuru_server_config.host }}
+export TSURU_TOKEN={{ tsuru_token | default('') }}
+export ARCHIVE_SERVER_READ=http://{{ tsuru_server_config.host }}:3232
+export ARCHIVE_SERVER_WRITE=http://127.0.0.1:3131
