@@ -12,3 +12,20 @@ tsuru_mongodb_config: {}
 # You can add some extra configs for mongo here, for example:
 #  replSet: tsuru
 # make sure if you do, remove the {} above
+tsuru_hipache_config:
+  user: www-data
+  server:
+    access_log: /var/log/hipache/access.log
+    accessLogMode: file
+    port: 80
+    workers: 5
+    maxSockets: 300
+    deadBackendTTL: 30
+    tcpTimeout: 30
+    retryOnError: 3
+    deadBackendOn500: true
+    httpKeepAlive: true
+  http:
+    port: 80
+    bind: ["0.0.0.0", "::1"]
+  driver: redis://127.0.0.1:6379

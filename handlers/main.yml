@@ -4,3 +4,6 @@
 
 - name: restart mongod
   service: state=restarted name=mongod
+
+- name: restart hipache
+  service: state=restarted name=hipache

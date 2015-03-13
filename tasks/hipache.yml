@@ -1,0 +1,32 @@
+- name: install nodejs
+  apt: state=present update_cache=yes cache_valid_time=86400 name=nodejs
+
+- name: check for npm
+  shell: which npm
+  ignore_errors: true
+  register: which_npm
+
+- name: install npm
+  apt: state=present name=npm
+  when: which_npm.rc != 0
+
+- name: install hipache
+  npm: state=present global=yes name=hipache
+
+- name: copy hipache upstart script
+  copy: src=hipache.upstart dest=/etc/init/hipache.conf owner=root group=root mode=0644
+  notify:
+    - restart hipache
+
+- name: create log directory
+  file: state=directory path={{ tsuru_hipache_config.server.access_log | dirname }} owner={{ tsuru_hipache_config.user }}
+  when: tsuru_hipache_config.server is defined
+# and access_log in tsuru_hipache_config.server
+
+- name: configure hipache
+  template: src=hipache.conf.j2 dest=/etc/hipache.conf owner=root group=root mode=0644
+  notify:
+    - restart hipache
+
+- name: start hipache
+  service: state=started name=hipache
