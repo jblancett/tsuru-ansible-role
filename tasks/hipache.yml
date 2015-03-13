@@ -1,8 +1,11 @@
+- include_vars: hipache.yml
+
 - name: install nodejs
   apt: state=present update_cache=yes cache_valid_time=86400 name=nodejs
 
 - name: check for npm
   shell: which npm
+  changed_when: false
   ignore_errors: true
   register: which_npm
 
