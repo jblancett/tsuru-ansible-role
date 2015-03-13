@@ -1,0 +1,5 @@
+- name: install docker-registry
+  apt: state=present update_cache=yes cache_valid_time=86400 name=docker-registry
+
+- name: start docker-registry
+  service: state=started name=docker-registry
