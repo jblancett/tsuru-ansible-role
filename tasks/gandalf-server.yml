@@ -15,5 +15,26 @@
   notify:
     - restart gandalf-server
 
-- name: generate .bash_profile for git user
+- name: generate .bash_profile
   template: src=bash_profile.j2 dest=/home/{{ tsuru_gandalf_config.uid }}/.bash_profile owner={{ tsuru_gandalf_config.uid }} group={{ tsuru_gandalf_config.uid }} mode=0644
+
+- name: check for tsuru token in .bash_profile
+  shell: cat /home/{{ tsuru_gandalf_config.uid }}/.bash_profile | grep TSURU_TOKEN=
+  register: git_bash_profile
+  ignore_errors: true
+  changed_when: false
+
+- name: generate tsuru token
+  shell: tsr token
+  register: tsr_token
+  when: not git_bash_profile.stdout | match('export TSURU_TOKEN=[a-f0-9]+')
+
+- name: write tsuru token to .bash_profile
+  lineinfile:
+    state: present
+    dest: /home/{{ tsuru_gandalf_config.uid }}/.bash_profile
+    regexp: export TSURU_TOKEN=
+    line: export TSURU_TOKEN={{ tsr_token.stdout }}
+  when: tsr_token | changed
+  tags:
+    - token
