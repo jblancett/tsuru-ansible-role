@@ -15,8 +15,13 @@
   notify:
     - restart gandalf-server
 
+- name: check for .bash_profile
+  stat: path=/home/{{ tsuru_gandalf_config.uid }}/.bash_profile
+  register: git_bash_profile
+
 - name: generate .bash_profile
   template: src=bash_profile.j2 dest=/home/{{ tsuru_gandalf_config.uid }}/.bash_profile owner={{ tsuru_gandalf_config.uid }} group={{ tsuru_gandalf_config.uid }} mode=0644
+  when: git_bash_profile.stat.exists is defined and git_bash_profile.stat.exists == False
 
 - name: check for tsuru token in .bash_profile
   shell: cat /home/{{ tsuru_gandalf_config.uid }}/.bash_profile | grep TSURU_TOKEN=
@@ -36,5 +41,3 @@
     regexp: export TSURU_TOKEN=
     line: export TSURU_TOKEN={{ tsr_token.stdout }}
   when: tsr_token | changed
-  tags:
-    - token
