@@ -2,7 +2,7 @@
 tsuru_hipache_config:
   user: www-data
   server:
-    access_log: /var/log/hipache/access.log
+    accessLog: /var/log/hipache/access.log
     accessLogMode: file
     port: 80
     workers: 5

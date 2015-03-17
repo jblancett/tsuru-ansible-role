@@ -22,9 +22,8 @@
     - restart hipache
 
 - name: create log directory
-  file: state=directory path={{ tsuru_hipache_config.server.access_log | dirname }} owner={{ tsuru_hipache_config.user }}
-  when: tsuru_hipache_config.server is defined
-# and access_log in tsuru_hipache_config.server
+  file: state=directory path={{ tsuru_hipache_config.server.accessLog | dirname }} owner={{ tsuru_hipache_config.user }}
+  when: tsuru_hipache_config.server.accessLog is defined
 
 - name: configure hipache
   template: src=hipache.conf.j2 dest=/etc/hipache.conf owner=root group=root mode=0644
