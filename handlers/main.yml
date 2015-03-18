@@ -11,5 +11,8 @@
 - name: restart gandalf-server
   service: state=restarted name=gandalf-server
 
+- name: restart docker-registry
+  service: state=restarted name=docker-registry
+
 - name: restart tsuru-server-api
   service: state=restarted name=tsuru-server-api
