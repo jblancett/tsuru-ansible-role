@@ -1,8 +1,4 @@
 ---
-#tsuru_git_hook can be set to false and nothing will be downloaded
-tsuru_git_hook: pre-receive
-tsuru_git_hook_url: https://raw.githubusercontent.com/tsuru/tsuru/master/misc/git-hooks/pre-receive.archive-server
-
 tsuru_gandalf_config:
   bin-path: /usr/bin/gandalf-ssh
   git:

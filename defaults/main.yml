@@ -12,6 +12,10 @@ tsuru_docker_options: --insecure-registry=\"0.0.0.0/0\" -H tcp://0.0.0.0:2375 -H
 
 tsuru_docker_registry_listen: ":5000"
 
+#tsuru_git_hook can be set to false and nothing will be downloaded
+tsuru_git_hook: pre-receive
+tsuru_git_hook_url: https://raw.githubusercontent.com/tsuru/tsuru/master/misc/git-hooks/pre-receive.archive-server
+
 # You can add some extra configs for mongo here, for example:
 #  replSet: tsuru
 # make sure if you do, remove the {}
@@ -57,6 +61,4 @@ tsuru_server_config:
     run-cmd:
       bin: /var/lib/tsuru/start
       port: 8888
-    ssh:
-      user: ubuntu
     servers: ['http://localhost:2375']
