@@ -21,6 +21,35 @@ tsuru_git_hook_url: https://raw.githubusercontent.com/tsuru/tsuru/master/misc/gi
 # make sure if you do, remove the {}
 tsuru_mongodb_config: {}
 
+tsuru_gandalf_config:
+  bin-path: /usr/bin/gandalf-ssh
+  git:
+    bare:
+      location: /var/lib/gandalf/repositories
+      template: /home/git/bare-template
+  authorized-keys-path: /home/git/.ssh/authorized_keys
+  host: "{{ inventory_hostname }}"
+  bind: 0.0.0.0:8000
+  uid: git
+
+tsuru_hipache_config:
+  user: www-data
+  server:
+    accessLog: /var/log/hipache/access.log
+    accessLogMode: file
+    port: 80
+    workers: 5
+    maxSockets: 300
+    deadBackendTTL: 30
+    tcpTimeout: 30
+    retryOnError: 3
+    deadBackendOn500: true
+    httpKeepAlive: true
+  http:
+    port: 80
+    bind: ["0.0.0.0", "::1"]
+  driver: redis://127.0.0.1:6379
+
 tsuru_server_enabled: true
 tsuru_server_config:
   listen: 0.0.0.0:8080
