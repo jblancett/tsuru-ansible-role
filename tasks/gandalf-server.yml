@@ -6,14 +6,20 @@
 
 - name: copy git hook
   get_url: url={{ tsuru_git_hook_url }} dest={{ tsuru_gandalf_config.git.bare.template }}/hooks/{{ tsuru_git_hook }} force=yes
+  tags:
+    - git-hook
 
 - name: list repos
   shell: ls /var/lib/gandalf/repositories
   register: repos
+  tags:
+    - git-hook
 
 - name: replace git hook on existing apps
   get_url: url={{ tsuru_git_hook_url }} dest=/var/lib/gandalf/repositories/{{ item }}/hooks/{{ tsuru_git_hook }} force=yes
   with_items: repos.stdout_lines
+  tags:
+    - git-hook
 
 - name: configure gandalf-server
   template: src=gandalf.conf.j2 dest=/etc/gandalf.conf owner=root group=root mode=0644
