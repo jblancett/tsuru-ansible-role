@@ -5,7 +5,25 @@
   file: state=directory path={{ tsuru_gandalf_config.git.bare.template }}/hooks owner=git group=git mode=0755
 
 - name: copy git hook
-  get_url: url={{ tsuru_git_hook_url }} dest={{ tsuru_gandalf_config.git.bare.template }}/hooks/{{ tsuru_git_hook }} force=yes
+  copy:
+    src=pre-receive.archive-server
+    dest={{ tsuru_gandalf_config.git.bare.template }}/hooks/{{ tsuru_git_hook }}
+    owner=git
+    group=git
+    mode=0755
+  when: not tsuru_git_hook_url
+  tags:
+    - git-hook
+
+- name: copy remote git hook
+  get_url:
+    url={{ tsuru_git_hook_url }}
+    dest={{ tsuru_gandalf_config.git.bare.template }}/hooks/{{ tsuru_git_hook }}
+    force=yes
+    owner=git
+    group=git
+    mode=0755
+  when: tsuru_git_hook_url
   tags:
     - git-hook
 
@@ -16,8 +34,16 @@
     - git-hook
 
 - name: replace git hook on existing apps
-  get_url: url={{ tsuru_git_hook_url }} dest=/var/lib/gandalf/repositories/{{ item }}/hooks/{{ tsuru_git_hook }} force=yes
+  copy: src=pre-receive.archive-server dest=/var/lib/gandalf/repositories/{{ item }}/hooks/{{ tsuru_git_hook }} owner=git group=git mode=0755
   with_items: repos.stdout_lines
+  when: not tsuru_git_hook_url
+  tags:
+    - git-hook
+
+- name: replace remote git hook on existing apps
+  get_url: url={{ tsuru_git_hook_url }} dest=/var/lib/gandalf/repositories/{{ item }}/hooks/{{ tsuru_git_hook }} force=yes owner=git group=git mode=0755
+  with_items: repos.stdout_lines
+  when: tsuru_git_hook_url
   tags:
     - git-hook
 
